@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일본어 GOSU가 될거야</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
+    }
+    
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 2em;
+    }
+    
+    .word-display {
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+    
+    /* 기본적으로 단어(일본어)는 검정색, 뜻/히라가나는 회색 */
+    .word-left {
+      color: #000;
+    }
+    
+    .word-right {
+      color: #777;
+    }
+    
+    .progress {
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+    
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .btn-group button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    
+    .btn-group button:hover {
+      background-color: #0056b3;
+    }
+    
+    .btn-group button:active {
+      transform: scale(0.98);
+    }
+    
+    #toggle-details {
+      background-color: #6c757d;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    
+    #toggle-details:hover {
+      background-color: #545b62;
+    }
+    
+    #toggle-details:active {
+      transform: scale(0.98);
+    }
+    
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #777;
+      font-size: 0.9em;
+      text-align: center;
+    }
+    
+    /* Orientation-based styling */
+    @media (orientation: portrait) {
+      /* 모바일: 세로가 더 길 경우 */
+      footer {
+        font-size: 1em;
+      }
+    }
+    
+    @media (orientation: landscape) {
+      /* PC: 가로가 더 길 경우 */
+      footer {
+        font-size: 0.8em;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+      }
+      .btn-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>일본어 GOSU가 될거야</h1>
+    
+    {# data는 "일본어 단어,뜻/히라가나" 형식의 문자열임 #}
+    {% set parts = data.split(',') %}
+    <div class="word-display">
+      {% if parts|length > 1 %}
+        <span class="word-right" id="word-details" style="display: none;">{{ parts[1] }}</span>
+        <br>
+      {% endif %}
+      <span class="word-left">{{ parts[0] }}</span>
+    </div>
+    
+    <p class="progress">{{ progress }}</p>
+    
+    {# 발음/뜻 확인 버튼 #}
+    {% if parts|length > 1 %}
+      <button id="toggle-details">발음/뜻 확인</button>
+    {% endif %}
+    
+    <form action="/update" method="post">
+      <div class="btn-group">
+        <button type="submit" name="action" value="not_memorized">ㅁㄹ</button>
+        <button type="submit" name="action" value="memorized">기훈</button>
+      </div>
+    </form>
+  </div>
+  
+  <footer>
+    <p>일본어 GOSU가 될거야.</p>
+  </footer>
+  
+  <script>
+    document.getElementById('toggle-details')?.addEventListener('click', function() {
+      var details = document.getElementById('word-details');
+      if (details.style.display === 'none') {
+        details.style.display = 'inline';
+        this.textContent = '발음/뜻 숨기기';
+      } else {
+        details.style.display = 'none';
+        this.textContent = '발음/뜻 확인';
+      }
+    });
+  </script>
+</body>
+</html>
