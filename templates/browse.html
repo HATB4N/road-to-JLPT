@@ -2,29 +2,46 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>파일 브라우저</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f2f5;
       padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
     }
+
     .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
       background-color: #fff;
+      padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 20px;
+      font-size: 1.8em;
+      color: #333;
     }
+
     .button-group {
       text-align: center;
       margin-bottom: 20px;
     }
+
     button {
       padding: 10px 20px;
       font-size: 1em;
@@ -36,29 +53,86 @@
       margin: 5px;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #0056b3;
     }
+
+    p {
+      font-size: 1em;
+      margin-bottom: 15px;
+      color: #555;
+    }
+
+    h3 {
+      margin-top: 25px;
+      font-size: 1.2em;
+      color: #444;
+    }
+
     ul {
       list-style: none;
-      padding: 0;
+      padding-left: 0;
     }
+
     li {
       margin: 8px 0;
     }
+
     a {
       text-decoration: none;
       color: #007bff;
+      word-break: break-word;
     }
+
     a:hover {
       text-decoration: underline;
     }
+
     .file-form {
       margin-top: 20px;
-      text-align: left;  /* 왼쪽 정렬 */
+      text-align: left;
     }
+
     .file-form div {
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      font-size: 1em;
+    }
+
+    .file-form input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    /* 모바일 반응형 */
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      h3 {
+        font-size: 1.1em;
+      }
+
+      .file-form div {
+        font-size: 0.95em;
+      }
+
+      button {
+        width: 100%;
+        font-size: 1em;
+        padding: 12px;
+        margin-top: 10px;
+      }
+
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
     }
   </style>
 </head>
@@ -73,10 +147,8 @@
       </a>
     </div>
     
-    <!-- 현재 경로 표시 -->
     <p>현재 경로: {{ base }}</p>
     
-    <!-- 디렉터리 목록 -->
     {% if directories %}
       <h3>디렉터리</h3>
       <ul>
@@ -88,16 +160,16 @@
       </ul>
     {% endif %}
     
-    <!-- 파일 목록 (텍스트 파일만) -->
     {% if files %}
       <h3>파일 목록</h3>
       <form class="file-form" action="{{ url_for('load') }}" method="post">
-        <!-- base 경로를 hidden 필드로 전달 -->
         <input type="hidden" name="base" value="{{ base }}">
         {% for f in files %}
           <div>
-            <input type="radio" id="{{ f }}" name="file" value="{{ f }}" required>
-            <label for="{{ f }}">{{ f }}</label>
+            <label>
+              <input type="radio" name="file" value="{{ f }}" required>
+              {{ f }}
+            </label>
           </div>
         {% endfor %}
         <button type="submit">파일 로드</button>
@@ -105,7 +177,6 @@
     {% else %}
       <p>이 경로에는 파일이 없습니다.</p>
     {% endif %}
-    
   </div>
 </body>
 </html>
